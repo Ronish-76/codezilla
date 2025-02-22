@@ -1,76 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pomofocus</title>
-    <link rel="stylesheet" href="pomodoro.css">
-</head>
-<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='pomodoro.css') }}" />
+  </head>
+  <body>
     <div class="container">
-        <nav class="sidebar">
-            <div class="logo">WillaZilla</div>
-            <div class="nav-title">Activity</div>
-            <ul class="nav-links">
-                <li><a href="pomodoro.html" class="nav-link">Pomodoro</a></li>
-                <li><a href="fitness.html" class="nav-link">Fitness</a></li>
-                <li><a href="remeals.html" class="nav-link active">ReMeals</a></li>
-                <li><a href="#" class="nav-link">Journals</a></li>
-            </ul>
-            <div class="nav-bottom">
-                <a href="#" class="nav-link">Setting</a>
-                <a href="#" class="nav-link">Contact US</a>
+      <!-- Sidebar -->
+      <nav class="sidebar">
+          <a href="{{ url_for('index') }}"><div class="logo">WillaZilla</div></a>
+          <div class="nav-section">
+              <h2>Activity</h2>
+              <ul>
+                  <li><a href="{{ url_for('pomodoro') }}" class="nav-link active">Pomodoro</a></li>
+                  <li><a href="{{ url_for('fitness') }}" class="nav-link">Fitness</a></li>
+                  <li><a href="{{ url_for('remeals') }}" class="nav-link">ReMeals</a></li>
+                  <li><a href="{{ url_for('journal') }}" class="nav-link">Journals</a></li>
+                  <li><a href="#" class="nav-link">Profile</a></li>
+                  <li><a href="{{ url_for('aboutus') }}" class="nav-link">About Us</a></li>
+              </ul>
+          </div>
+      </nav>
+      <main>
+        <header>
+          <h1>Pomofocus</h1>
+          <!-- <button id="streaks-btn">★ Streaks</button> -->
+        </header>
+        <div class="content">
+          <section class="timer">
+            <div class="timer-modes">
+              <button class="mode-btn active pomodoro-btn" data-mode="pomodoro">
+                Pomodoro
+              </button>
+              <button class="mode-btn rest-btn" type="button" data-mode="rest">Rest</button>
+              <button class="mode-btn long-rest-btn" data-mode="long-rest">Long Rest</button>
             </div>
-        </nav>
-        <main>
-            <header>
-                <h1>Pomofocus</h1>
-                <button id="streaks-btn">★ Streaks</button>
-            </header>
-            <div class="content">
-                <section class="timer">
-                    <div class="timer-modes">
-                        <button class="mode-btn active" data-mode="pomodoro">Pomodoro</button>
-                        <button class="mode-btn" data-mode="rest">Rest</button>
-                        <button class="mode-btn" data-mode="long-rest">Long Rest</button>
-                    </div>
-                    <div class="timer-display">00:00:00</div>
-                    <button id="start-btn">Start</button>
-                </section>
-                <section class="todo-list">
-                    <h2>To Do List</h2>
-                    <ul id="tasks">
-                        <li>
-                            <input type="checkbox" id="task1">
-                            <label for="task1">Drink 3 liters water</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="task2">
-                            <label for="task2">Drink 3 liters water</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="task3">
-                            <label for="task3">Drink 3 liters water</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="task4">
-                            <label for="task4">Drink 3 liters water</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="task5">
-                            <label for="task5">Drink 3 liters water</label>
-                        </li>
-                    </ul>
-                    <button id="add-task-btn">+</button>
-                </section>
-                <section class="music-player">
-                    <span>♪ Play Music</span>
-                    <audio id="background-music" src="lofi.mp3" loop></audio>
-                    <button id="play-music-btn">▶</button>
-                </section>
-            </div>
-        </main>
+            <div class="timer-display">00:00:00</div>
+            <button id="start-btn">Start</button>
+          </section>
+          <section class="todo-list">
+            <h2>To Do List</h2>
+            <ul id="tasks"></ul>
+            <button id="add-task-btn">+</button>
+          </section>
+          <section class="music-player">
+            <span>♪ Play Music</span>
+            <audio id="background-music" src="{{ url_for('static', filename='lofi.mp3') }}" loop></audio>
+            <button id="play-music-btn">▶</button>
+          </section>
+          <!-- <img class="screenshot" src="Screenshot 2025-02-22 084335.png" alt="">
+          <img class="screenshot" src="The Pomodoro Technique for Procrastination (The Complete Guide).jpg" alt=""> -->
+        </div>
+      </main>
     </div>
-    <script src="pomodoro.js"></script>
-</body>
+    <script src="{{ url_for('static', filename='pomodoro.js') }}"></script>
+    <script>
+      function markTaskComplete(task) {
+        task.style.textDecoration = "line-through";
+        alert("Task Completed: " + task.innerText);
+      }
+
+      function notifyTimerEnd() {
+        if (Notification.permission === "granted") {
+          new Notification("Time's up! Take a break or start another session.");
+        } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              new Notification(
+                "Time's up! Take a break or start another session."
+              );
+            }
+          });
+        }
+      }
+    </script>
+  </body>
 </html>
